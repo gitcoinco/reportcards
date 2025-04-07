@@ -3,15 +3,6 @@ import { useParams } from "react-router-dom";
 import { useRound } from "../providers/RoundProvider";
 import { useProgramAggregate } from "../hooks/useProgramAggregate";
 
-const getTokenInfo = (tokenAddress: string): {decimals: number, symbol: string} => {
-  // use gitcoin chain data package here
-  return { decimals: 6, symbol: "USDC" };
-};
-
-const formatTokenAmount = (amount: number, decimals: number): string => {
-  return (amount / Math.pow(10, decimals)).toFixed(2);
-};
-
 export const RoundStats = () => {
   const { chainId, roundId } = useParams();
   const numericChainId = chainId ? parseInt(chainId, 10) : 0;
