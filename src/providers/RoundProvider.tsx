@@ -2,10 +2,11 @@ import { createContext, useContext, useMemo, useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { graphqlClient } from '../lib/graphql';
 import { GET_ROUND } from '../queries/round';
-import { Round, RoundData } from '../types/round';
+import { Round, RoundData, LeaderboardEntry } from '../types/round';
 import { getChainById } from '@gitcoin/gitcoin-chain-data';
 import { formatUnits, Hex } from 'viem';
 import { getTokenPrice } from '../utils';
+
 interface RoundContextType {
     data: RoundData | null;
     isLoading: boolean;
@@ -69,54 +70,40 @@ export const RoundProvider = ({ children, chainId, roundId }: { children: React.
 
             const leaderboard = applications
                 .map(app => {
-                    // Find matching distribution for this application
                     const matchingDistribution = data.matchingDistribution?.find(
                         dist => dist.projectId.toLowerCase() === app.projectId.toLowerCase()
                     );
 
-                    // Calculate matched amount in USD
                     let matchedUsd = 0;
                     if (matchingDistribution && tokenDecimals) {
                         const matchedAmount = formatUnits(BigInt(matchingDistribution.matchAmountInToken), tokenDecimals);
                         matchedUsd = tokenPrice ? tokenPrice * Number(matchedAmount) : 0;
                     }
 
+                    const totalAmount = app.totalAmountDonatedInUsd + matchedUsd;
+
                     return {
-                        projectName: app.metadata.application.project.title,
-                        description: app.metadata.application.project.description,
-                        logoImg: `${import.meta.env.VITE_IPFS_URL}${app.metadata.application.project.logoImg}`,
-                        projectGithub: app.metadata.application.project.projectGithub,
-                        projectTwitter: app.metadata.application.project.projectTwitter,
-                        website: app.metadata.application.project.website,
-                        uniqueDonorsCount: app.uniqueDonorsCount,
-                        totalAmountDonatedInUsd: app.totalAmountDonatedInUsd,
-                        matchedUsd: matchedUsd,
-                        totalAmount: app.totalAmountDonatedInUsd + matchedUsd
-                    };
-                })
-                .sort((a, b) => b.totalAmount - a.totalAmount)
-                .reduce((acc, entry, index) => {
-                    acc[`${index + 1}`] = {
-                        metrics: {
-                            uniqueDonorsCount: entry.uniqueDonorsCount,
-                            totalAmountDonatedInUsd: entry.totalAmountDonatedInUsd.toFixed(2),
-                            matchedUsd: entry.matchedUsd.toFixed(2),
-                            totalAmount: entry.totalAmount.toFixed(2),
-                            totalUniqueDonors: entry.uniqueDonorsCount,
-                            totalDonated: entry.totalAmountDonatedInUsd.toFixed(2),
-                            totalMatched: entry.matchedUsd.toFixed(2)
-                        },
                         project: {
-                            name: entry.projectName,
-                            description: entry.description,
-                            logoImg: entry.logoImg,
-                            projectGithub: entry.projectGithub,
-                            projectTwitter: entry.projectTwitter,
-                            website: entry.website
+                            name: app.metadata.application.project.title,
+                            description: app.metadata.application.project.description,
+                            logoImg: `${import.meta.env.VITE_IPFS_URL}${app.metadata.application.project.logoImg}`,
+                            projectGithub: app.metadata.application.project.projectGithub,
+                            projectTwitter: app.metadata.application.project.projectTwitter,
+                            website: app.metadata.application.project.website
+                        },
+                        metrics: {
+                            uniqueDonorsCount: app.uniqueDonorsCount,
+                            totalAmountDonatedInUsd: Number(app.totalAmountDonatedInUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })),
+                            matchedUsd: Number(matchedUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })),
+                            totalAmount: Number(totalAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }))
                         }
                     };
+                })
+                .sort((a, b) => Number(b.metrics.totalAmount) - Number(a.metrics.totalAmount))
+                .reduce((acc, entry, index) => {
+                    acc[index + 1] = entry;
                     return acc;
-                }, {} as Record<string, any>);
+                }, {} as Record<number, LeaderboardEntry>);
 
             const matchingCap = roundMetadata.quadraticFundingConfig?.matchingCapAmount || 0;
             const matchingCapInUsd = matchingCap && matchingCap !== 0 ? (matchingCap * Number(matchAmount)) / 100 : 0;
@@ -143,6 +130,7 @@ export const RoundProvider = ({ children, chainId, roundId }: { children: React.
                 tokenDecimals,
                 plotData,
                 leaderboard,
+                matchingDistribution: data.matchingDistribution
             });
         };
 

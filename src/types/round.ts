@@ -1,5 +1,6 @@
 export interface Application {
     id: string;
+    projectId: string;
     uniqueDonorsCount: number;
     totalAmountDonatedInUsd: number;
     metadata: {
@@ -18,6 +19,12 @@ export interface RoundMetadata {
     };
 }
 
+export interface MatchingDistribution {
+    projectId: string;
+    matchAmountInToken: string;
+    matchAmountInUsd: number;
+}
+
 export interface Round {
     id: string;
     matchAmount: string;
@@ -34,6 +41,18 @@ export interface Round {
     projectId: string;
     strategyName: string;
     applications: Application[];
+    matchingDistribution: MatchingDistribution[];
+}
+
+export interface ProgramRound {
+    id: string;
+    chainId: number;
+    projectId: string;
+    roundMetadata: RoundMetadata;
+    project: {
+        name: string;
+        id: string;
+    };
 }
 
 export interface PlotData {
@@ -42,12 +61,20 @@ export interface PlotData {
 }
 
 export interface LeaderboardEntry {
-    projectName: string;
-    uniqueDonorsCount: number;
-    totalAmountDonatedInUsd: number;
-    matchedUsd: number;
-    totalAmount: number;
-    rank: number;
+    project: {
+        name: string;
+        description?: string;
+        logoImg?: string;
+        projectGithub?: string;
+        projectTwitter?: string;
+        website?: string;
+    };
+    metrics: {
+        uniqueDonorsCount: number;
+        totalAmountDonatedInUsd: number;
+        matchedUsd: number;
+        totalAmount: number;
+    };
 }
 
 export interface RoundData {
@@ -71,5 +98,27 @@ export interface RoundData {
     tokenSymbol: string;
     tokenDecimals: number;
     plotData: PlotData;
-    leaderboard: LeaderboardEntry[];
+    leaderboard: Record<number, LeaderboardEntry>;
+    matchingDistribution: MatchingDistribution[];
+}
+
+export interface Program {
+    projectName: string;
+    projectId: string;
+    rounds: ProgramRound[];
+    stats?: {
+        uniqueDonors: number;
+        totalMatchAmount: number;
+        totalFundedAmount: number;
+        totalDonations: number;
+        totalDonationsCount: number;
+        approvedApplications: number;
+        rejectedApplications: number;
+    };
+}
+
+export interface ProgramContextType {
+    programs: Program[];
+    isLoading: boolean;
+    error: Error | null;
 } 

@@ -8,7 +8,7 @@ import { Download } from "../components/Download";
 import { ShareResults } from "../components/ShareResults";
 import Footer from "../components/Footer";
 
-export const Main = () => {
+export const RoundDetails = () => {
   const { isLoading } = useRound();
 
   if (isLoading) {
@@ -16,7 +16,7 @@ export const Main = () => {
   }
 
   return (
-    <div>
+    <div className="flex flex-col gap-4 max-w-[1000px] mx-auto">
       <RoundHeader />
       <StatDescription />
       <RoundStats />
