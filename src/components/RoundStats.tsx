@@ -1,10 +1,24 @@
 import { StatCardGroup } from "@gitcoin/ui";
+import { useParams } from "react-router-dom";
 import { useRound } from "../providers/RoundProvider";
+import { useProgramAggregate } from "../hooks/useProgramAggregate";
+
+const getTokenInfo = (tokenAddress: string): {decimals: number, symbol: string} => {
+  // use gitcoin chain data package here
+  return { decimals: 6, symbol: "USDC" };
+};
+
+const formatTokenAmount = (amount: number, decimals: number): string => {
+  return (amount / Math.pow(10, decimals)).toFixed(2);
+};
 
 export const RoundStats = () => {
-  const { data } = useRound();
+  const { chainId, roundId } = useParams();
+  const numericChainId = chainId ? parseInt(chainId, 10) : 0;
+  const { data: roundData } = useRound();
+  const { data: aggregateData } = useProgramAggregate(numericChainId, [roundId || ""]);
 
-  if (!data) return null;
+  if (!roundData || !aggregateData) return null;
 
   return (
     <div className="mx-auto mt-12 px-4 flex flex-col gap-8 w-full">
@@ -15,12 +29,12 @@ export const RoundStats = () => {
         stats={[
           {
             label: "Matching Pool",
-            value: `${data.matchAmount} ${data.tokenSymbol}`,
-            subvalue: `($${data.matchAmountInUsd.toFixed(2)})`,
+            value: `${roundData.matchAmount} ${roundData.tokenSymbol}`,
+            subvalue: `($${roundData.matchAmountInUsd.toFixed(2)})`,
           },
           {
             label: "Total USD Crowdfunded",
-            value: `$${data.totalAmountDonatedInUsd.toFixed(2)}`,
+            value: `$${roundData.totalAmountDonatedInUsd.toFixed(2)}`,
           },
         ]}
       />
@@ -31,12 +45,12 @@ export const RoundStats = () => {
         stats={[
           {
             label: "Matching Cap",
-            value: `${data.matchingCap}%`,
-            subvalue: `(${data.matchingCapInUsd.toFixed(2)} ${data.tokenSymbol})`,
+            value: `${roundData.matchingCap}%`,
+            subvalue: `($${roundData.matchingCapInUsd.toFixed(2)} ${roundData.tokenSymbol})`,
           },
           {
             label: "Total Projects",
-            value: data.applicationCount.toString(),
+            value: roundData.applicationCount.toString(),
           },
         ]}
       />
@@ -47,11 +61,26 @@ export const RoundStats = () => {
         stats={[
           {
             label: "Total Donations",
-            value: data.totalDonationsCount.toString(),
+            value: roundData.totalDonationsCount.toString(),
           },
           {
             label: "Total Donors",
-            value: data.uniqueDonorsCount.toString(),
+            value: roundData.uniqueDonorsCount.toString(),
+          },
+        ]}
+      />
+      <StatCardGroup
+        justify="center"
+        className="w-full"
+        size="lg"
+        stats={[
+          {
+            label: "Approved Applications",
+            value: (aggregateData.approvedApplications?.aggregate?.count || 0).toString(),
+          },
+          {
+            label: "Rejected Applications",
+            value: (aggregateData.rejectedApplications?.aggregate?.count || 0).toString(),
           },
         ]}
       />

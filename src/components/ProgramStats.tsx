@@ -3,6 +3,15 @@ import { useProgram } from "../providers/ProgramProvider";
 import { useProgramAggregate } from "../hooks/useProgramAggregate";
 import { useParams } from "react-router-dom";
 
+const getTokenDecimals = (tokenAddress: string): number => {
+  // Hardcoded to 6 for USDC
+  return 6;
+};
+
+const formatTokenAmount = (amount: number, decimals: number): string => {
+  return (amount / Math.pow(10, decimals)).toFixed(2);
+};
+
 export const ProgramStats = () => {
   const { programs, isLoading } = useProgram();
   const { programId } = useParams();
@@ -40,7 +49,8 @@ export const ProgramStats = () => {
       totalDonations: acc.totalDonations + (data.roundsAggregate?.aggregate?.sum?.totalAmountDonatedInUsd || 0),
       totalDonationsCount: acc.totalDonationsCount + (data.roundsAggregate?.aggregate?.sum?.totalDonationsCount || 0),
       approvedApplications: acc.approvedApplications + (data.approvedApplications?.aggregate?.count || 0),
-      rejectedApplications: acc.rejectedApplications + (data.rejectedApplications?.aggregate?.count || 0)
+      rejectedApplications: acc.rejectedApplications + (data.rejectedApplications?.aggregate?.count || 0),
+      matchTokenAmount: acc.matchTokenAmount + (data.roundsAggregate?.aggregate?.sum?.matchAmount || 0)
     };
   }, {
     uniqueDonors: 0,
@@ -49,8 +59,12 @@ export const ProgramStats = () => {
     totalDonations: 0,
     totalDonationsCount: 0,
     approvedApplications: 0,
-    rejectedApplications: 0
+    rejectedApplications: 0,
+    matchTokenAmount: 0
   });
+
+  // Get decimals for the match token (assuming all rounds use the same token)
+  const matchTokenDecimals = rounds[0]?.matchTokenAddress ? getTokenDecimals(rounds[0].matchTokenAddress) : 6;
 
   return (
     <div className="mx-auto mt-12 px-4 flex flex-col gap-8 w-full">
@@ -61,7 +75,8 @@ export const ProgramStats = () => {
         stats={[
           {
             label: "Total Match Amount",
-            value: `$${stats.totalMatchAmount.toFixed(2)}`,
+            value: `${formatTokenAmount(stats.matchTokenAmount, matchTokenDecimals)} USDC`,
+            subvalue: `($${stats.totalMatchAmount.toFixed(2)} USD)`,
           },
           {
             label: "Total Funded Amount",

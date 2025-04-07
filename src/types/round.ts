@@ -44,16 +44,19 @@ export interface Round {
     matchingDistribution: MatchingDistribution[];
 }
 
-export interface ProgramRound {
+export type ProgramRound = {
     id: string;
     chainId: number;
+    roundMetadata: {
+        name: string;
+        description: string;
+    };
     projectId: string;
-    roundMetadata: RoundMetadata;
     project: {
         name: string;
-        id: string;
     };
-}
+    matchTokenAddress: string;
+};
 
 export interface PlotData {
     labels: string[];
@@ -102,7 +105,7 @@ export interface RoundData {
     matchingDistribution: MatchingDistribution[];
 }
 
-export interface Program {
+export type Program = {
     projectName: string;
     projectId: string;
     rounds: ProgramRound[];
@@ -115,10 +118,10 @@ export interface Program {
         approvedApplications: number;
         rejectedApplications: number;
     };
-}
+};
 
-export interface ProgramContextType {
+export type ProgramContextType = {
     programs: Program[];
     isLoading: boolean;
     error: Error | null;
-} 
+}; 

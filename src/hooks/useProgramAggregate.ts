@@ -9,6 +9,7 @@ type AggregateData = {
     fundedAmountInUsd?: number;
     totalAmountDonatedInUsd?: number;
     totalDonationsCount?: number;
+    matchAmount?: number;
   } } };
   approvedApplications?: { aggregate?: { count?: number } };
   rejectedApplications?: { aggregate?: { count?: number } };
@@ -25,7 +26,8 @@ export const useProgramAggregate = (chainId: number, roundIds: string[]) => {
             matchAmountInUsd: 0,
             fundedAmountInUsd: 0,
             totalAmountDonatedInUsd: 0,
-            totalDonationsCount: 0
+            totalDonationsCount: 0,
+            matchAmount: 0
           } } },
           approvedApplications: { aggregate: { count: 0 } },
           rejectedApplications: { aggregate: { count: 0 } }

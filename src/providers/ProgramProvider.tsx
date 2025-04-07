@@ -43,7 +43,8 @@ export const ProgramProvider = ({ children }: { children: React.ReactNode }) => 
         chainId: round.chainId,
         roundMetadata: round.roundMetadata,
         projectId: round.projectId,
-        project: round.project
+        project: round.project,
+        matchTokenAddress: round.matchTokenAddress
       });
     }
     

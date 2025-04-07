@@ -76,6 +76,7 @@ export const GET_PROGRAM_AGGREGATE_DATA = gql`
   }
 `; 
 
+
 // export const GET_PROGRAM_DATA = gql`
 // query getProgramData($programId: String!) {
 //   rounds(where: {donations: {amountInUsd: {_gte: "50"}}, project: {tags: {_contains: "program"}, id: {_eq: $programId}}, uniqueDonorsCount: {_gte: 10}}, orderBy: {createdAtBlock: DESC}) {
