@@ -33,6 +33,7 @@ export const Plot = () => {
   // Don't render until we have dimensions
   if (windowDimensions.width === 0) return null;
 
+  if (!data?.plotData) return <p>No plot data</p>;
   return (
     <div className="w-full h-full py-20">
       <div className="max-w-[1000px] mx-auto px-4 flex justify-center">

@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { ShareButton } from "./ShareButton";
 export const RoundHeader = () => {
   const { chainId, roundId } = useParams();
-  const { data } = useRound(Number(chainId), roundId);
+  const { data } = useRound();
 
   if (!chainId || !roundId || !data) return null;
 

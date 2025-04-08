@@ -1,3 +1,5 @@
+import { getChainById } from "@gitcoin/gitcoin-chain-data";
+
 export type PriceSource = {
     chainId: number;
     address: `0x${string}`; 
