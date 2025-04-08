@@ -9,10 +9,6 @@
     "lint": "eslint .",
     "preview": "vite preview"
   },
-  "engines": {
-    "node": ">=20.18.1",
-    "pnpm": ">=9.3.0"
-  },
   "dependencies": {
     "@gitcoin/ui": "0.0.0-beta.36",
     "@tanstack/react-query": "^5.71.5",
