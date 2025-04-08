@@ -73,6 +73,11 @@ export const GET_PROGRAM_AGGREGATE_DATA = gql`
         count(columns: id)
       }
     }
+    allApplications: applicationsAggregate(where: {chainId: {_eq: $chainId}, roundId: {_in: $roundIds}}) {
+      aggregate {
+        count(columns: id)
+      }
+    }
   }
 `; 
 

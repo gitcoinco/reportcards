@@ -13,6 +13,7 @@ type AggregateData = {
   } } };
   approvedApplications?: { aggregate?: { count?: number } };
   rejectedApplications?: { aggregate?: { count?: number } };
+  allApplications?: { aggregate?: { count?: number } };
 };
 
 export const useProgramAggregate = (chainId: number, roundIds: string[]) => {
@@ -30,7 +31,8 @@ export const useProgramAggregate = (chainId: number, roundIds: string[]) => {
             matchAmount: 0
           } } },
           approvedApplications: { aggregate: { count: 0 } },
-          rejectedApplications: { aggregate: { count: 0 } }
+          rejectedApplications: { aggregate: { count: 0 } },
+          allApplications: { aggregate: { count: 0 } }
         };
       }
       return graphqlClient.request<AggregateData>(GET_PROGRAM_AGGREGATE_DATA, {

@@ -117,6 +117,7 @@ export type Program = {
         totalDonationsCount: number;
         approvedApplications: number;
         rejectedApplications: number;
+        allApplications: number;
     };
 };
 
