@@ -4,4 +4,9 @@ import react from '@vitejs/plugin-react-swc'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  build: {
+    rollupOptions: {
+      external: ['graphql'], // Externalize 'graphql' so it won't be bundled
+    },
+  },
 })
