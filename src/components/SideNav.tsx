@@ -1,29 +1,30 @@
 import { IconType, SideNav as SideNavWrapper } from "@gitcoin/ui";
 import { useProgram } from "../providers/ProgramProvider";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface SideNavProps {    
   programId: string;
 }
 
 export const SideNav = ({ programId }: SideNavProps) => {
-  const { programs, isLoading, error } = useProgram();
-  const program = programs.find(program => program.projectId.toLowerCase() === programId.toLowerCase());
+  const { activeProgram, setActiveProgramId } = useProgram();
   const navigate = useNavigate();
   const [activeId, setActiveId] = useState<string | undefined>();
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  useEffect(() => {
+    if (programId) {
+      setActiveProgramId(programId);
+    }
+  }, [programId, setActiveProgramId]);
 
-  if (error) {
-    return <div>Error: {error.message}</div>;
+  if (!activeProgram) {
+    return <div>Program not found</div>;
   }
 
   const items = [
     {
-      content: program?.projectName,
+      content: activeProgram.projectName,
       id: `/program/${programId}`,
       iconType: IconType.HOME,
       items: []
@@ -32,11 +33,11 @@ export const SideNav = ({ programId }: SideNavProps) => {
       content: "Detailed Round Metrics",
       iconType: IconType.COLLECTION,
       id: `/${programId}`,
-      items: program?.rounds.map(round => ({
+      items: activeProgram.rounds.map(round => ({
         content: round.roundMetadata.name,
         id: `/${round.chainId}/${round.id}`,
         items: []
-      })) || []
+      }))
     }
   ];
 

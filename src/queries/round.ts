@@ -81,6 +81,38 @@ export const GET_PROGRAM_AGGREGATE_DATA = gql`
   }
 `; 
 
+export const GET_PROGRAM_DONATIONS = gql`
+  query getProgramDonations($chainId: Int!, $roundIds: [String!]!, $limit: Int!, $offset: Int!) {
+    donations(
+      where: {
+        chainId: {_eq: $chainId}, 
+        roundId: {_in: $roundIds}
+      },
+      limit: $limit,
+      offset: $offset
+    ) {
+      amount
+      amountInUsd
+      applicationId
+      timestamp
+      chainId
+      id
+      donorAddress
+      recipientAddress
+      projectId
+      roundId
+      tokenAddress
+      application {
+        project {
+          id
+          name
+        }
+      }
+    }
+  }
+`; 
+
+
 
 // export const GET_PROGRAM_DATA = gql`
 // query getProgramData($programId: String!) {
