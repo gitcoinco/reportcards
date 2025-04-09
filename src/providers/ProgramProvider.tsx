@@ -37,7 +37,10 @@ interface TokenUsage {
 }
 
 interface DonationsByHour {
-  [hour: string]: number;
+  [hour: string]: {
+    count: number;
+    amount: number;
+  };
 }
 
 // Remove the local ProgramContextType interface and extend the imported one
@@ -103,9 +106,10 @@ const getDonationsByHour = (donations: DonationNode[]): DonationsByHour => {
     const date = new Date(donation.timestamp);
     const hour = date.toISOString().slice(0, 13); // Format: YYYY-MM-DDTHH
     if (!acc[hour]) {
-      acc[hour] = 0;
+      acc[hour] = { count: 0, amount: 0 };
     }
-    acc[hour]++;
+    acc[hour].count++;
+    acc[hour].amount += donation.amountInUsd;
     return acc;
   }, {} as DonationsByHour);
 };

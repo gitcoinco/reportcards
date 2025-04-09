@@ -3,7 +3,6 @@ import { useProgram } from "../providers/ProgramProvider";
 import { LoadingSpinner } from "./LoadingSpinner";
 
 const formatHour = (hourString: string) => {
-  // The hourString is in format "YYYY-MM-DDTHH:00:00.000Z"
   const [datePart, timePart] = hourString.split('T');
   const [year, month, day] = datePart.split('-');
   const hour = timePart.split(':')[0];
@@ -14,7 +13,7 @@ const formatHour = (hourString: string) => {
   return `${day} ${monthName} ${year} ${hour}:00`;
 };
 
-export const DonationsByHourChart = () => {
+export const DonationAmountByHourChart = () => {
   const { donationsByHour, isDonationsLoading } = useProgram();
 
   if (isDonationsLoading) {
@@ -25,29 +24,28 @@ export const DonationsByHourChart = () => {
     return wrapReturn(<div>No donation data available</div>);
   }
 
-  // Sort hours chronologically
   const sortedHours = Object.keys(donationsByHour).sort();
 
   const chartData = [{
-    color: '#6B46C1', // Purple
-    name: 'Donations',
+    color: '#2F855A',
+    name: 'Donation Amount',
     x: sortedHours.map(formatHour),
-    y: sortedHours.map(hour => donationsByHour[hour].count)
+    y: sortedHours.map(hour => donationsByHour[hour].amount)
   }];
 
   return (
     wrapReturn(
       <BarChart
         data={chartData}
-        description="Number of donations per hour"
-        title="Donations by Hour"
+        description="Total donation amount per hour"
+        title="Donation Amount by Hour"
         height={500}
         isDateAxis={false}
         width={800}
         xAxisLabelInterval={5}
         xAxisTitle="Date & Time"
-        yAxisLabelInterval={5}
-        yAxisTitle="Number of Donations"
+        yAxisLabelInterval={1000}
+        yAxisTitle="Amount (USD)"
       />
     )
   );
@@ -55,7 +53,7 @@ export const DonationsByHourChart = () => {
 
 const wrapReturn = (component: React.ReactNode) => {
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 py-10">
+    <div className="w-full max-w-4xl mx-auto px-4 py-20">
       {component}
     </div>
   );

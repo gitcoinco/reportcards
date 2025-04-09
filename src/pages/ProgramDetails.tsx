@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { ProgramStats } from "../components/ProgramStats";
 import { TokenUsageChart } from "../components/TokenUsageChart";
 import { DonationsByHourChart } from "../components/DonationsByHourChart";
+import { DonationAmountByHourChart } from "../components/DonationAmountByHourChart";
+import { CumulativeDonationAmountChart } from "../components/CumulativeDonationAmountChart";
 import { useProgram } from "../providers/ProgramProvider";
 import { useParams } from "react-router-dom";
 
@@ -24,6 +26,8 @@ export const ProgramDetails = () => {
         <ProgramStats />
         <TokenUsageChart />
         <DonationsByHourChart />
+        <DonationAmountByHourChart />
+        <CumulativeDonationAmountChart />
       </div>
     </div>
   );
