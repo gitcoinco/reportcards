@@ -45,12 +45,9 @@ const RoundRoute = () => {
 };
 
 const ProgramRoute = () => {
-  const { programId } = useParams();
-  if (!programId) return null;
-
   return (
     <Layout>
-      <ProgramDetails programId={programId} />
+      <ProgramDetails/>
     </Layout>
   );
 };
