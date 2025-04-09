@@ -24,7 +24,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex min-h-screen p-6">
       {(programId || program) && <SideNav programId={programId || program?.projectId || ""} />}
-      <div className="flex-1 p-8">
+      <div className="flex-1">
         {children}
       </div>
     </div>

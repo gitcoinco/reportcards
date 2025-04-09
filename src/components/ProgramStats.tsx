@@ -2,10 +2,13 @@ import { StatCardGroup } from "@gitcoin/ui";
 import { useProgram } from "../providers/ProgramProvider";
 import { useProgramAggregate } from "../hooks/useProgramAggregate";
 import { useParams } from "react-router-dom";
+import { getChainById } from "@gitcoin/gitcoin-chain-data";
 
-const getTokenDecimals = (tokenAddress: string): number => {
-  // Hardcoded to 6 for USDC
-  return 6;
+
+const getTokenDecimals = (tokenAddress: string, chainId: number): number => {
+  const chain = getChainById(chainId);
+  const token = chain.tokens.find((t) => t.address === tokenAddress);
+  return token?.decimals || 18;
 };
 
 const formatTokenAmount = (amount: number, decimals: number): string => {
@@ -84,10 +87,8 @@ export const ProgramStats = () => {
     }
   );
 
-  // Get decimals for the match token (assuming all rounds use the same token)
-  const matchTokenDecimals = rounds[0]?.matchTokenAddress
-    ? getTokenDecimals(rounds[0].matchTokenAddress)
-    : 6;
+  const round = rounds[0];
+  const matchTokenDecimals = getTokenDecimals(round.matchTokenAddress, round.chainId);
 
   return (
     <div className="mx-auto mt-12 px-4 flex flex-col gap-8 w-full">
