@@ -130,4 +130,24 @@ export interface ProgramContextType {
     activeProgramId: string | null;
     activeProgram: Program | null;
     setActiveProgramId: (id: string | null) => void;
+}
+
+export interface DonationNode {
+    amount: string;
+    amountInUsd: number;
+    applicationId: string;
+    timestamp: string;
+    chainId: number;
+    id: string;
+    donorAddress: string;
+    recipientAddress: string;
+    projectId: string;
+    roundId: string;
+    tokenAddress: string;
+    application: {
+        project: {
+            id: string;
+            name: string;
+        };
+    };
 } 

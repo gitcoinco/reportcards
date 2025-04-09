@@ -46,6 +46,7 @@ interface DonationsByHour {
 // Remove the local ProgramContextType interface and extend the imported one
 type ExtendedProgramContextType = ProgramContextType & {
   donationsByHour: DonationsByHour;
+  donationsData: DonationNode[];
 };
 
 const ProgramContext = createContext<ExtendedProgramContextType>({
@@ -55,6 +56,7 @@ const ProgramContext = createContext<ExtendedProgramContextType>({
   error: null,
   tokenUsage: {},
   donationsByHour: {},
+  donationsData: [],
   activeProgramId: null,
   activeProgram: null,
   setActiveProgramId: () => {}
@@ -215,6 +217,7 @@ export const ProgramProvider = ({ children }: { children: React.ReactNode }) => 
       error: roundsError,
       tokenUsage,
       donationsByHour,
+      donationsData: donationsData || [],
       activeProgramId,
       activeProgram,
       setActiveProgramId
