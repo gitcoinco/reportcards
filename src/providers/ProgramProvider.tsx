@@ -40,19 +40,12 @@ interface DonationsByHour {
   [hour: string]: number;
 }
 
-interface ProgramContextType {
-  programs: Program[];
-  isLoading: boolean;
-  isDonationsLoading: boolean;
-  error: Error | null;
-  tokenUsage: { [tokenAddress: string]: number };
+// Remove the local ProgramContextType interface and extend the imported one
+type ExtendedProgramContextType = ProgramContextType & {
   donationsByHour: DonationsByHour;
-  activeProgramId: string | null;
-  activeProgram: Program | null;
-  setActiveProgramId: (id: string | null) => void;
-}
+};
 
-const ProgramContext = createContext<ProgramContextType>({
+const ProgramContext = createContext<ExtendedProgramContextType>({
   programs: [],
   isLoading: false,
   isDonationsLoading: false,

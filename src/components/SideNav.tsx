@@ -49,7 +49,7 @@ export const SideNav = ({ programId }: SideNavProps) => {
   };
 
   return (
-    <div className="w-[450px] p-4">
+    <div className="w-[350px] p-4">
       <SideNavWrapper
         items={items}
         activeId={activeId}
