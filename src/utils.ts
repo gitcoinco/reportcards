@@ -9,14 +9,25 @@ export type PriceSource = {
 export async function getTokenPrice(
     tokenId: string,    
     priceSource?: PriceSource
-  ) {
-    if (
-      tokenId === "" &&
-      priceSource?.chainId !== undefined &&
-      priceSource?.address !== undefined
-    ) {
-      return getTokenPriceFromCoingecko(priceSource);
+  ): Promise<number> {
+    if (priceSource?.chainId !== undefined && priceSource?.address !== undefined) {
+      try {
+        return await getTokenPriceFromCoingecko(priceSource);
+      } catch (error) {
+        console.error("Error fetching token price from Coingecko:", error);
+      }
     }
+
+    try {
+      return await getTokenPriceFromRedstone(tokenId);
+    } catch (error) {
+      console.error("Error fetching token price from Redstone:", error);
+    }
+
+    return 0;
+  }
+
+  async function getTokenPriceFromRedstone(tokenId: string) {
     const tokenPriceEndpoint = `https://api.redstone.finance/prices?symbol=${tokenId}&provider=redstone&limit=1`;
     const resp = await fetch(tokenPriceEndpoint);
     const data = await resp.json();
