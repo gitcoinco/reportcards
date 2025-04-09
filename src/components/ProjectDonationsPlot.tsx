@@ -3,10 +3,10 @@ import { useProgram } from "../providers/ProgramProvider";
 import { LoadingSpinner } from "./LoadingSpinner";
 import { DonationNode } from "../types/round";
 
-const wrapReturn = (content: React.ReactNode) => (
+const wrapReturn = (content: React.ReactNode, showHeading: boolean = true) => (
   <div className="w-full h-full py-20">
     <div className="max-w-[1000px] mx-auto px-4 flex flex-col items-center">
-      <h2 className="text-xl font-bold mb-4">Donations by Project</h2>
+      {showHeading && <h2 className="text-2xl font-bold mb-4">Donations by Project</h2>}
       {content}
     </div>
   </div>
@@ -16,7 +16,7 @@ export const ProjectDonationsPlot = () => {
   const { donationsData, isDonationsLoading, activeProgram } = useProgram();
 
   if (isDonationsLoading) {
-    return wrapReturn(<LoadingSpinner />);
+    return wrapReturn(<LoadingSpinner />, false);
   }
 
   if (!donationsData || donationsData.length === 0) {

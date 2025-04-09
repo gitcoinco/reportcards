@@ -6,6 +6,7 @@ import { DonationAmountByHourChart } from "../components/DonationAmountByHourCha
 import { CumulativeDonationAmountChart } from "../components/CumulativeDonationAmountChart";
 import { DonorDistributionPieChart } from "../components/DonorDistributionPieChart";
 import { ProjectDonationsPlot } from "../components/ProjectDonationsPlot";
+import { DonationSizeDistribution } from "../components/DonationSizeDistribution";
 import { useProgram } from "../providers/ProgramProvider";
 import { useParams } from "react-router-dom";
 
@@ -28,6 +29,7 @@ export const ProgramDetails = () => {
         <ProgramStats />
         <DonorDistributionPieChart />
         <ProjectDonationsPlot />
+        <DonationSizeDistribution />
         <TokenUsageChart />
         <DonationsByHourChart />
         <DonationAmountByHourChart />
