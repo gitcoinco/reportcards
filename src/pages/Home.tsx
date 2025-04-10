@@ -1,11 +1,16 @@
+import { ProgramDropDown } from "../components/ProgramDropDown";
+
 export const Home = () => {
   return (
-    <div className="flex justify-center items-center min-h-screen">
-      <img 
-        src="https://i.imgflip.com/9pzwm5.jpg" 
-        alt="Welcome to Report Cards"
-        className="max-w-full h-auto"
-      />
+    <div className="flex flex-col justify-center items-center min-h-screen space-y-4">
+      <div className="text-sm text-gray-500">Get Started</div>
+      <div className="flex flex-col items-center max-w-md">
+        <h1 className="text-4xl font-bold">Find data on web3</h1>
+        <h1 className="text-4xl font-bold">funding rounds</h1>
+      </div>
+      <div className="flex flex-col items-center max-w-md">
+        <ProgramDropDown />
+      </div>
     </div>
   );
 }; 
