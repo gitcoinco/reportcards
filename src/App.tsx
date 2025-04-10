@@ -46,14 +46,11 @@ const RoundRoute = () => {
 };
 
 const ProgramRoute = () => {
-  const { programs, activeProgramId } = useProgram();
-  
+
   return (
-    <DonationProvider activeProgramId={activeProgramId} roundsData={programs}>
       <Layout>
         <ProgramDetails/>
       </Layout>
-    </DonationProvider>
   );
 };
 

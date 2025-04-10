@@ -14,25 +14,19 @@ import { useParams } from "react-router-dom";
 export const ProgramDetails = () => {
   const { programId } = useParams();
   const { activeProgram, setActiveProgramId, programs } = useProgram();
-  
-  console.log("ProgramDetails render with programId:", programId);
-  console.log("activeProgram:", activeProgram);
-  
+
   useEffect(() => {
     if (programId) {
-      console.log("Setting activeProgramId to:", programId);
       setActiveProgramId(programId);
     }
   }, [programId, setActiveProgramId]);
 
   if (!activeProgram) {
-    console.log("No active program found");
     return null;
   }
 
   // Get all rounds for the active program
   const roundsData = activeProgram.rounds;
-  console.log("Rounds data:", roundsData);
 
   return (
     <DonationProvider activeProgramId={activeProgram.projectId} roundsData={roundsData}>

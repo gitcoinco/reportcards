@@ -2,7 +2,7 @@ import { PieChart } from "@gitcoin/ui";
 import { useDonation } from "../../providers/DonationProvider";
 import { LoadingSpinner } from "../main/LoadingSpinner";
 import { getChainById, TToken } from "@gitcoin/gitcoin-chain-data";
-import { DonationNode } from "../../types/round";
+import { DonationNode } from "../../types";
 
 interface Token {
   address: string;

@@ -2,11 +2,7 @@ import { createContext, useContext, useMemo, useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { graphqlClient } from '../lib/graphql';
 import { GET_PROGRAM_WITH_ROUND_ID } from '../queries/round';
-import { ProgramRound, Program, ProgramContextType } from '../types/round';
-
-interface GraphQLResponse {
-  rounds: ProgramRound[];
-}
+import { ProgramRound, Program, ProgramContextType, GraphQLResponse } from '../types';
 
 const ProgramContext = createContext<ProgramContextType>({
   programs: [],

@@ -1,7 +1,7 @@
 import { useDonation } from "../../providers/DonationProvider";
 import { LoadingSpinner } from "../main/LoadingSpinner";
 import { PieChart } from "@gitcoin/ui";
-import { DonationNode } from "../../types/round";
+import { DonationNode } from "../../types";
 
 const wrapReturn = (component: React.ReactNode) => {
   return (
