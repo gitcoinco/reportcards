@@ -8,33 +8,47 @@ import { DonorDistributionPieChart } from "../components/program/DonorDistributi
 import { ProjectDonationsPlot } from "../components/program/ProjectDonationsPlot";
 import { DonationSizeDistribution } from "../components/program/DonationSizeDistribution";
 import { useProgram } from "../providers/ProgramProvider";
+import { DonationProvider } from "../providers/DonationProvider";
 import { useParams } from "react-router-dom";
 
 export const ProgramDetails = () => {
   const { programId } = useParams();
-  const { activeProgram, setActiveProgramId } = useProgram();
+  const { activeProgram, setActiveProgramId, programs } = useProgram();
+  
+  console.log("ProgramDetails render with programId:", programId);
+  console.log("activeProgram:", activeProgram);
   
   useEffect(() => {
     if (programId) {
+      console.log("Setting activeProgramId to:", programId);
       setActiveProgramId(programId);
     }
   }, [programId, setActiveProgramId]);
 
-  if (!activeProgram) return null;
+  if (!activeProgram) {
+    console.log("No active program found");
+    return null;
+  }
+
+  // Get all rounds for the active program
+  const roundsData = activeProgram.rounds;
+  console.log("Rounds data:", roundsData);
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4">{activeProgram.projectName} Stats</h1>
-      <div className="bg-white rounded-lg shadow p-6">
-        <ProgramStats />
-        <DonorDistributionPieChart />
-        <ProjectDonationsPlot />
-        <DonationSizeDistribution />
-        <TokenUsageChart />
-        <DonationsByHourChart />
-        <DonationAmountByHourChart />
-        <CumulativeDonationAmountChart />
+    <DonationProvider activeProgramId={activeProgram.projectId} roundsData={roundsData}>
+      <div>
+        <h1 className="text-2xl font-bold mb-4">{activeProgram.projectName} Stats</h1>
+        <div className="bg-white rounded-lg shadow p-6">
+          <ProgramStats />
+          <DonorDistributionPieChart />
+          <ProjectDonationsPlot />
+          <DonationSizeDistribution />
+          <TokenUsageChart />
+          <DonationsByHourChart />
+          <DonationAmountByHourChart />
+          <CumulativeDonationAmountChart />
+        </div>
       </div>
-    </div>
+    </DonationProvider>
   );
 };

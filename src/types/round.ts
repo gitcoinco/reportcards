@@ -124,12 +124,10 @@ export type Program = {
 export interface ProgramContextType {
     programs: Program[];
     isLoading: boolean;
-    isDonationsLoading: boolean;
     error: Error | null;
-    tokenUsage: { [tokenAddress: string]: number };
     activeProgramId: string | null;
     activeProgram: Program | null;
-    setActiveProgramId: (id: string | null) => void;
+    setActiveProgramId: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 export interface DonationNode {

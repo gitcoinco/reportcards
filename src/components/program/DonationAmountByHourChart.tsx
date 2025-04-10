@@ -1,5 +1,5 @@
 import { BarChart } from "@gitcoin/ui";
-import { useProgram } from "../../providers/ProgramProvider";
+import { useDonation } from "../../providers/DonationProvider";
 import { LoadingSpinner } from "../main/LoadingSpinner";
 
 const formatHour = (hourString: string) => {
@@ -14,7 +14,7 @@ const formatHour = (hourString: string) => {
 };
 
 export const DonationAmountByHourChart = () => {
-  const { donationsByHour, isDonationsLoading } = useProgram();
+  const { donationsByHour, isDonationsLoading } = useDonation();
 
   if (isDonationsLoading) {
     return wrapReturn(<LoadingSpinner />);
@@ -27,8 +27,8 @@ export const DonationAmountByHourChart = () => {
   const sortedHours = Object.keys(donationsByHour).sort();
 
   const chartData = [{
-    color: '#2F855A',
-    name: 'Donation Amount',
+    color: '#9C7CEE',
+    name: 'Donation Amount by Hour',
     x: sortedHours.map(formatHour),
     y: sortedHours.map(hour => donationsByHour[hour].amount)
   }];
@@ -44,7 +44,6 @@ export const DonationAmountByHourChart = () => {
         width={800}
         xAxisLabelInterval={5}
         xAxisTitle="Date & Time"
-        yAxisLabelInterval={1000}
         yAxisTitle="Amount (USD)"
       />
     )

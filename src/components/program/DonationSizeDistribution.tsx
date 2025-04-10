@@ -1,61 +1,61 @@
+import { useDonation } from "../../providers/DonationProvider";
 import { useProgram } from "../../providers/ProgramProvider";
 import { LoadingSpinner } from "../main/LoadingSpinner";
-import { DonationNode } from "../../types/round";
-import { PieChart, BarChart } from "@gitcoin/ui";
 import { TabView } from "../main/TabView";
-const wrapReturn = (content: React.ReactNode, showHeading: boolean = true) => (
-  <div className="w-full h-full py-20">
-    <div className="max-w-[1000px] mx-auto px-4 flex flex-col items-center">
-      {showHeading && <h2 className="text-2xl font-bold mb-4">Donation Size Distribution</h2>}
-      {content}
+import { PieChart, BarChart } from "@gitcoin/ui";
+
+const wrapReturn = (component: React.ReactNode) => {
+  return (
+    <div className="w-full max-w-4xl mx-auto px-4 py-20">
+      {component}
     </div>
-  </div>
-);
+  );
+};
 
-const DonationSizeDistributionContent = () => {
-  const { donationsData } = useProgram();
+export const DonationSizeDistribution = () => {
+  const { donationsData, isDonationsLoading } = useDonation();
+  const { activeProgram } = useProgram();
 
-  // Define donation size ranges with more granularity for smaller amounts
+  if (isDonationsLoading) {
+    return wrapReturn(<LoadingSpinner />);
+  }
+
+  if (!donationsData || donationsData.length === 0) {
+    return wrapReturn(<div>No donations available</div>);
+  }
+
+  // Define donation size ranges
   const ranges = [
     { min: 0, max: 1, label: "$0-1" },
     { min: 1, max: 2, label: "$1-2" },
     { min: 2, max: 4, label: "$2-4" },
-    { min: 4, max: 6, label: "$4-6" },
-    { min: 6, max: 10, label: "$6-10" },
+    { min: 4, max: 10, label: "$4-10" },
     { min: 10, max: 20, label: "$10-20" },
     { min: 20, max: 50, label: "$20-50" },
     { min: 50, max: 100, label: "$50-100" },
-    { min: 100, max: 250, label: "$100-250" },
-    { min: 250, max: Infinity, label: "$250+" }
+    { min: 100, max: 200, label: "$100-200" },
+    { min: 200, max: Infinity, label: "$200+" },
   ];
 
   // Count donations in each range
-  const rangeCounts = ranges.map(range => ({
-    label: range.label,
-    count: donationsData.filter((donation: DonationNode) => {
-      const amount = donation.amountInUsd;
-      return amount >= range.min && amount < range.max;
-    }).length
-  }));
+  const rangeCounts = ranges.map(range => {
+    const count = donationsData.filter(donation => 
+      donation.amountInUsd >= range.min && donation.amountInUsd < range.max
+    ).length;
+    return { ...range, count };
+  });
 
-  // Calculate total number of donations
-  const totalDonations = rangeCounts.reduce((sum, range) => sum + range.count, 0);
-
-  // Prepare data for PieChart
-  const pieData = ranges.map(range => ({
+  // Prepare data for charts
+  const pieData = rangeCounts.map(range => ({
     name: range.label,
-    value: donationsData.filter((donation: DonationNode) => {
-      const amount = donation.amountInUsd;
-      return amount >= range.min && amount < range.max;
-    }).length
+    value: range.count
   }));
 
-  // Prepare data for BarChart
   const barData = [{
-    color: '#4299E1', // Blue
-    name: 'Number of Donations',
-    x: rangeCounts.map(r => r.label),
-    y: rangeCounts.map(r => r.count)
+    color: '#4299E1',
+    name: 'Donation Size Distribution',
+    x: rangeCounts.map(range => range.label),
+    y: rangeCounts.map(range => range.count)
   }];
 
   const tabs = [
@@ -64,9 +64,9 @@ const DonationSizeDistributionContent = () => {
       content: (
         <PieChart
           data={pieData}
-          description="Distribution of donations by size range"
-          // title="Donation Size Distribution"
-          total={`${totalDonations}`}
+          description="Distribution of donation sizes"
+          title="Donation Size Distribution"
+          total={`${donationsData.length}`}
           width={800}
         />
       )
@@ -76,12 +76,11 @@ const DonationSizeDistributionContent = () => {
       content: (
         <BarChart
           data={barData}
-          description="Distribution of donations by size range"
-          // title="Donation Size Distribution"
+          description="Distribution of donation sizes"
+          title="Donation Size Distribution"
           height={500}
           isDateAxis={false}
           width={800}
-          xAxisLabelInterval={1}
           xAxisTitle="Donation Size Range"
           yAxisTitle="Number of Donations"
         />
@@ -89,19 +88,7 @@ const DonationSizeDistributionContent = () => {
     }
   ];
 
-  return <TabView tabs={tabs} />;
-};
-
-export const DonationSizeDistribution = () => {
-  const { donationsData, isDonationsLoading, activeProgram } = useProgram();
-
-  if (isDonationsLoading) {
-    return wrapReturn(<LoadingSpinner />, false);
-  }
-
-  if (!donationsData || donationsData.length === 0) {
-    return wrapReturn(<div>No donation data available</div>);
-  }
-
-  return wrapReturn(<DonationSizeDistributionContent />);
+  return wrapReturn(
+    <TabView tabs={tabs} />
+  );
 }; 

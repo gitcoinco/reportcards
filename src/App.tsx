@@ -3,6 +3,7 @@ import { RoundProvider } from "./providers/RoundProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Navbar } from "@gitcoin/ui";
 import { ProgramProvider } from "./providers/ProgramProvider";
+import { DonationProvider } from "./providers/DonationProvider";
 import { RoundDetails } from "./pages/RoundDetails";
 import { ProgramDetails } from "./pages/ProgramDetails";
 import { SideNav } from "./components/main/SideNav";
@@ -45,10 +46,14 @@ const RoundRoute = () => {
 };
 
 const ProgramRoute = () => {
+  const { programs, activeProgramId } = useProgram();
+  
   return (
-    <Layout>
-      <ProgramDetails/>
-    </Layout>
+    <DonationProvider activeProgramId={activeProgramId} roundsData={programs}>
+      <Layout>
+        <ProgramDetails/>
+      </Layout>
+    </DonationProvider>
   );
 };
 

@@ -1,10 +1,25 @@
 import { PieChart } from "@gitcoin/ui";
-import { useProgram } from "../../providers/ProgramProvider";
+import { useDonation } from "../../providers/DonationProvider";
 import { LoadingSpinner } from "../main/LoadingSpinner";
-import { getChainById, TChain } from "@gitcoin/gitcoin-chain-data";
+import { getChainById, TToken } from "@gitcoin/gitcoin-chain-data";
+import { DonationNode } from "../../types/round";
+
+interface Token {
+  address: string;
+  symbol: string;
+  decimals: number;
+}
+
+const wrapReturn = (component: React.ReactNode) => {
+  return (
+    <div className="w-full max-w-4xl mx-auto px-4 py-20">
+      {component}
+    </div>
+  );
+};
 
 export const TokenUsageChart = () => {
-  const { tokenUsage, isDonationsLoading, activeProgram } = useProgram();
+  const { tokenUsage, isDonationsLoading, donationsData } = useDonation();
 
   if (isDonationsLoading) {
     return wrapReturn(<LoadingSpinner />);
@@ -14,49 +29,42 @@ export const TokenUsageChart = () => {
     return wrapReturn(<div>No token usage data available</div>);
   }
 
-  // Transform token usage data into format required by PieChart
+  // Create a map of token addresses to their chain IDs
+  const tokenChainMap = new Map<string, number>();
+  donationsData.forEach((donation: DonationNode) => {
+    tokenChainMap.set(donation.tokenAddress.toLowerCase(), donation.chainId);
+  });
+
   const chartData = Object.entries(tokenUsage).map(([tokenAddress, count]) => {
-    // Get unique chain IDs from all rounds
-    const chainIds = [...new Set(activeProgram?.rounds.map(round => round.chainId) || [])];
-    
-    // Try to find the token in each chain
-    let tokenCode = tokenAddress;
-    for (const chainId of chainIds) {
+    // Get the chain ID for this token
+    const chainId = tokenChainMap.get(tokenAddress.toLowerCase());
+    let tokenSymbol = tokenAddress;
+
+    if (chainId) {
       const chain = getChainById(chainId);
-      const token = chain.tokens.find(t => t.address.toLowerCase() === tokenAddress.toLowerCase());
-      if (token) {
-        tokenCode = token.code;
-        break;
+      if (chain) {
+        const token = chain.tokens.find((t: TToken) => 
+          t.address.toLowerCase() === tokenAddress.toLowerCase()
+        );
+        if (token) {
+          tokenSymbol = token.code;
+        }
       }
     }
-
+    
     return {
-      name: tokenCode,
-      value: count
+      name: tokenSymbol,
+      value: count,
     };
   });
 
-  // Calculate total number of donations
-  const totalDonations = Object.values(tokenUsage).reduce((sum, count) => sum + count, 0);
-
-  return (
-    wrapReturn(
-      <PieChart
-        data={chartData}
-        description="Number of donations using each token"
-        title="Token Usage Distribution"
-        total={`${totalDonations}`}
-        width={800}
-      />
-    )
-  );
-}; 
-
-
-const wrapReturn = (component: React.ReactNode) => {
-  return (
-    <div className="w-full max-w-4xl mx-auto px-4 py-20">
-      {component}
-    </div>
+  return wrapReturn(
+    <PieChart
+      data={chartData}
+      description="Distribution of tokens used for donations"
+      title="Token Usage"
+      total={`${Object.values(tokenUsage).reduce((a, b) => a + b, 0)}`}
+      width={800}
+    />
   );
 };

@@ -102,7 +102,7 @@ export const ProgramStats = () => {
             value: `${formatTokenAmount(
               stats.matchTokenAmount,
               matchTokenDecimals
-            )} USDC`,
+            )} ${getChainById(round.chainId).tokens.find((t) => t.address.toLowerCase() === round.matchTokenAddress.toLowerCase())?.code}`,
             subvalue: `($${stats.totalMatchAmount.toFixed(2)} USD)`,
           },
           {
