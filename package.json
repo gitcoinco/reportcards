@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@gitcoin/ui": "0.0.0-beta.38",
+    "@gitcoin/ui": "0.0.0-beta.40",
     "@tanstack/react-query": "^5.71.5",
     "dotenv": "^16.4.7",
     "graphql": "^16.10.0",
