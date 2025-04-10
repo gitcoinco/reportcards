@@ -1,4 +1,4 @@
-import { ProgramDropDown } from "../components/ProgramDropDown";
+import { ProgramDropDown } from "../components/main/ProgramDropDown";
 
 export const Home = () => {
   return (

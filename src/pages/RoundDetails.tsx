@@ -1,12 +1,13 @@
-import { RoundHeader } from "../components/RoundHeader";
-import { StatDescription } from "../components/StatDescription";
-import { RoundStats } from "../components/RoundStats";
+import { RoundHeader } from "../components/main/RoundHeader";
+import { StatDescription } from "../components/main/StatDescription";
+import { RoundStats } from "../components/round/RoundStats";
 import { useRound } from "../providers/RoundProvider";
-import { Plot } from "../components/Plot";
-import { Leaderboard } from "../components/Leaderboard";
-import { Download } from "../components/Download";
-import { ShareResults } from "../components/ShareResults";
-import Footer from "../components/Footer";
+import { Plot } from "../components/round/Plot";
+import { Download } from "../components/round/Download";
+import { Leaderboard } from "../components/round/Leaderboard";
+import { ShareResults } from "../components/round/ShareResults";
+import Footer from "../components/round/Footer";
+
 
 export const RoundDetails = () => {
   const { isLoading } = useRound();

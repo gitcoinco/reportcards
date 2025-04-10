@@ -5,9 +5,9 @@ import { Navbar } from "@gitcoin/ui";
 import { ProgramProvider } from "./providers/ProgramProvider";
 import { RoundDetails } from "./pages/RoundDetails";
 import { ProgramDetails } from "./pages/ProgramDetails";
-import { SideNav } from "./components/SideNav";
+import { SideNav } from "./components/main/SideNav";
 import { useProgram } from "./providers/ProgramProvider";
-import { ProgramDropDown } from "./components/ProgramDropDown";
+import { ProgramDropDown } from "./components/main/ProgramDropDown";
 import { Home } from "./pages/Home";
 
 const queryClient = new QueryClient();
@@ -57,7 +57,7 @@ export const App = () => {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <ProgramProvider>
-          <Navbar showDivider={false} text={{ text: "Metrics", link: "/" }}>
+          <Navbar showDivider={false} text={{ text: "Report Cards", link: "/" }}>
             <ProgramDropDown />
           </Navbar>
           <Routes>

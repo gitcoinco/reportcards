@@ -1,6 +1,6 @@
 import { PieChart } from "@gitcoin/ui";
-import { useProgram } from "../providers/ProgramProvider";
-import { LoadingSpinner } from "./LoadingSpinner";
+import { useProgram } from "../../providers/ProgramProvider";
+import { LoadingSpinner } from "../main/LoadingSpinner";
 import { getChainById, TChain } from "@gitcoin/gitcoin-chain-data";
 
 export const TokenUsageChart = () => {

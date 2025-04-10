@@ -1,7 +1,7 @@
 import { StatCardGroup } from "@gitcoin/ui";
 import { useParams } from "react-router-dom";
-import { useRound } from "../providers/RoundProvider";
-import { useProgramAggregate } from "../hooks/useProgramAggregate";
+import { useRound } from "../../providers/RoundProvider";
+import { useProgramAggregate } from "../../hooks/useProgramAggregate";
 
 export const RoundStats = () => {
   const { chainId, roundId } = useParams();

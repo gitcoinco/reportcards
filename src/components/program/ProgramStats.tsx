@@ -1,6 +1,6 @@
 import { StatCardGroup } from "@gitcoin/ui";
-import { useProgram } from "../providers/ProgramProvider";
-import { useProgramAggregate } from "../hooks/useProgramAggregate";
+import { useProgram } from "../../providers/ProgramProvider";
+import { useProgramAggregate } from "../../hooks/useProgramAggregate";
 import { useParams } from "react-router-dom";
 import { getChainById } from "@gitcoin/gitcoin-chain-data";
 

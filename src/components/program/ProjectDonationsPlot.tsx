@@ -1,7 +1,7 @@
 import { SquarePlot } from "@gitcoin/ui";
-import { useProgram } from "../providers/ProgramProvider";
-import { LoadingSpinner } from "./LoadingSpinner";
-import { DonationNode } from "../types/round";
+import { useProgram } from "../../providers/ProgramProvider";
+import { LoadingSpinner } from "../main/LoadingSpinner";
+import { DonationNode } from "../../types/round";
 
 const wrapReturn = (content: React.ReactNode, showHeading: boolean = true) => (
   <div className="w-full h-full py-20">

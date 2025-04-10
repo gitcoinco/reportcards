@@ -1,9 +1,8 @@
-import { useProgram } from "../providers/ProgramProvider";
-import { LoadingSpinner } from "./LoadingSpinner";
-import { DonationNode } from "../types/round";
-import { TabView } from "./TabView";
+import { useProgram } from "../../providers/ProgramProvider";
+import { LoadingSpinner } from "../main/LoadingSpinner";
+import { DonationNode } from "../../types/round";
 import { PieChart, BarChart } from "@gitcoin/ui";
-
+import { TabView } from "../main/TabView";
 const wrapReturn = (content: React.ReactNode, showHeading: boolean = true) => (
   <div className="w-full h-full py-20">
     <div className="max-w-[1000px] mx-auto px-4 flex flex-col items-center">

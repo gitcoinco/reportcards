@@ -1,4 +1,4 @@
-import { useRound } from "../providers/RoundProvider";
+import { useRound } from "../../providers/RoundProvider";
 import { Leaderboard as LeaderboardComponent } from "@gitcoin/ui";
 
 export const Leaderboard = () => {

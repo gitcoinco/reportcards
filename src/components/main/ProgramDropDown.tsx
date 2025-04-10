@@ -1,5 +1,5 @@
 import { Select } from "@gitcoin/ui";
-import { useProgram } from "../providers/ProgramProvider";
+import { useProgram } from "../../providers/ProgramProvider";
 import { useNavigate } from "react-router-dom";
 
 export const ProgramDropDown = () => {

@@ -1,6 +1,6 @@
 import { BarChart } from "@gitcoin/ui";
-import { useProgram } from "../providers/ProgramProvider";
-import { LoadingSpinner } from "./LoadingSpinner";
+import { useProgram } from "../../providers/ProgramProvider";
+import { LoadingSpinner } from "../main/LoadingSpinner";
 
 const formatHour = (hourString: string) => {
   const [datePart, timePart] = hourString.split('T');
@@ -13,7 +13,7 @@ const formatHour = (hourString: string) => {
   return `${day} ${monthName} ${year} ${hour}:00`;
 };
 
-export const CumulativeDonationAmountChart = () => {
+export const DonationAmountByHourChart = () => {
   const { donationsByHour, isDonationsLoading } = useProgram();
 
   if (isDonationsLoading) {
@@ -25,31 +25,27 @@ export const CumulativeDonationAmountChart = () => {
   }
 
   const sortedHours = Object.keys(donationsByHour).sort();
-  let cumulativeAmount = 0;
 
   const chartData = [{
-    color: '#319795',
-    name: 'Cumulative Donation Amount',
+    color: '#2F855A',
+    name: 'Donation Amount',
     x: sortedHours.map(formatHour),
-    y: sortedHours.map(hour => {
-      cumulativeAmount += donationsByHour[hour].amount;
-      return cumulativeAmount;
-    })
+    y: sortedHours.map(hour => donationsByHour[hour].amount)
   }];
 
   return (
     wrapReturn(
       <BarChart
         data={chartData}
-        description="Cumulative donation amount over time"
-        title="Cumulative Donation Amount"
+        description="Total donation amount per hour"
+        title="Donation Amount by Hour"
         height={500}
         isDateAxis={false}
         width={800}
         xAxisLabelInterval={5}
         xAxisTitle="Date & Time"
         yAxisLabelInterval={1000}
-        yAxisTitle="Cumulative Amount (USD)"
+        yAxisTitle="Amount (USD)"
       />
     )
   );

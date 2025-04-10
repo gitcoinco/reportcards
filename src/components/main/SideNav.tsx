@@ -1,5 +1,5 @@
 import { IconType, SideNav as SideNavWrapper } from "@gitcoin/ui";
-import { useProgram } from "../providers/ProgramProvider";
+import { useProgram } from "../../providers/ProgramProvider";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 

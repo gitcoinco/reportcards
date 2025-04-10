@@ -1,12 +1,12 @@
 import { useEffect } from "react";
-import { ProgramStats } from "../components/ProgramStats";
-import { TokenUsageChart } from "../components/TokenUsageChart";
-import { DonationsByHourChart } from "../components/DonationsByHourChart";
-import { DonationAmountByHourChart } from "../components/DonationAmountByHourChart";
-import { CumulativeDonationAmountChart } from "../components/CumulativeDonationAmountChart";
-import { DonorDistributionPieChart } from "../components/DonorDistributionPieChart";
-import { ProjectDonationsPlot } from "../components/ProjectDonationsPlot";
-import { DonationSizeDistribution } from "../components/DonationSizeDistribution";
+import { ProgramStats } from "../components/program/ProgramStats";
+import { TokenUsageChart } from "../components/program/TokenUsageChart";
+import { DonationsByHourChart } from "../components/program/DonationsByHourChart";
+import { DonationAmountByHourChart } from "../components/program/DonationAmountByHourChart";
+import { CumulativeDonationAmountChart } from "../components/program/CumulativeDonationAmountChart";
+import { DonorDistributionPieChart } from "../components/program/DonorDistributionPieChart";
+import { ProjectDonationsPlot } from "../components/program/ProjectDonationsPlot";
+import { DonationSizeDistribution } from "../components/program/DonationSizeDistribution";
 import { useProgram } from "../providers/ProgramProvider";
 import { useParams } from "react-router-dom";
 
