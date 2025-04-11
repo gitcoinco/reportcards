@@ -59,15 +59,17 @@ export const App = () => {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <ProgramProvider>
-          <Navbar showDivider={false} text={{ text: "Report Cards", link: "/" }}>
-            <ProgramDropDown />
-          </Navbar>
+          <DonationProvider>
+            <Navbar showDivider={false} text={{ text: "Report Cards", link: "/" }}>
+              <ProgramDropDown />
+            </Navbar>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/:chainId/:roundId" element={<RoundRoute />} />
             <Route path="/program/:programId" element={<ProgramRoute />} />
           </Routes>
-        </ProgramProvider>
+          </DonationProvider>   
+          </ProgramProvider>
       </BrowserRouter>
     </QueryClientProvider>
   );

@@ -2,6 +2,7 @@ import { useDonation } from "../../providers/DonationProvider";
 import { LoadingSpinner } from "../main/LoadingSpinner";
 import { TabView } from "../main/TabView";
 import { PieChart, BarChart } from "@gitcoin/ui";
+import { useParams } from "react-router-dom";
 
 const wrapReturn = (component: React.ReactNode) => {
   return (
@@ -11,15 +12,23 @@ const wrapReturn = (component: React.ReactNode) => {
   );
 };
 
-export const DonationSizeDistribution = () => {
-  const { donationsData, isDonationsLoading } = useDonation();
+export const RoundDonationSizeDistribution = () => {
+  const { roundId } = useParams();
+  const { isDonationsLoading, roundDonations } = useDonation();
 
   if (isDonationsLoading) {
     return wrapReturn(<LoadingSpinner />);
   }
 
+  if (!roundId || !roundDonations[roundId]) {
+    return wrapReturn(<div>No round data available</div>);
+  }
+
+  const roundData = roundDonations[roundId];
+  const { donationsData } = roundData;
+
   if (!donationsData || donationsData.length === 0) {
-    return wrapReturn(<div>No donations available</div>);
+    return wrapReturn(<div>No donations available for this round</div>);
   }
 
   // Define donation size ranges
@@ -62,8 +71,8 @@ export const DonationSizeDistribution = () => {
       content: (
         <PieChart
           data={pieData}
-          description="Distribution of donation sizes"
-          title="Donation Size Distribution"
+          description="Distribution of donation sizes for this round"
+          title="Round Donation Size Distribution"
           total={`${donationsData.length}`}
           width={800}
         />
@@ -74,8 +83,8 @@ export const DonationSizeDistribution = () => {
       content: (
         <BarChart
           data={barData}
-          description="Distribution of donation sizes"
-          title="Donation Size Distribution"
+          description="Distribution of donation sizes for this round"
+          title="Round Donation Size Distribution"
           height={500}
           isDateAxis={false}
           width={800}

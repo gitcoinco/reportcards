@@ -8,12 +8,11 @@ import { DonorDistributionPieChart } from "../components/program/DonorDistributi
 import { ProjectDonationsPlot } from "../components/program/ProjectDonationsPlot";
 import { DonationSizeDistribution } from "../components/program/DonationSizeDistribution";
 import { useProgram } from "../providers/ProgramProvider";
-import { DonationProvider } from "../providers/DonationProvider";
 import { useParams } from "react-router-dom";
 
 export const ProgramDetails = () => {
   const { programId } = useParams();
-  const { activeProgram, setActiveProgramId, programs } = useProgram();
+  const { activeProgram, setActiveProgramId, } = useProgram();
 
   useEffect(() => {
     if (programId) {
@@ -26,10 +25,8 @@ export const ProgramDetails = () => {
   }
 
   // Get all rounds for the active program
-  const roundsData = activeProgram.rounds;
 
   return (
-    <DonationProvider activeProgramId={activeProgram.projectId} roundsData={roundsData}>
       <div>
         <h1 className="text-2xl font-bold mb-4">{activeProgram.projectName} Stats</h1>
         <div className="bg-white rounded-lg shadow p-6">
@@ -43,6 +40,5 @@ export const ProgramDetails = () => {
           <CumulativeDonationAmountChart />
         </div>
       </div>
-    </DonationProvider>
   );
 };

@@ -88,6 +88,7 @@ export interface RoundData {
   donationStartTime: string;
   donationEndTime: string;
   id: string;
+  chainId: number;
   matchAmount: string;
   matchAmountInUsd: number;
   matchingCap: number;
@@ -176,32 +177,10 @@ export interface DonationsByHour {
   };
 }
 
-export interface ChainRoundStats {
-  chainId: number;
-  roundId: string;
-  totalDonations: number;
-  totalAmountDonatedInUsd: number;
-  uniqueDonors: number;
+export interface RoundDonationData {
+  donationsData: DonationNode[];
   tokenUsage: TokenUsage;
   donationsByHour: DonationsByHour;
-  averageDonationAmount: number;
-  medianDonationAmount: number;
-  topDonors: {
-    donorAddress: string;
-    totalDonated: number;
-    donationCount: number;
-  }[];
-  donationDistribution: {
-    small: number;  // < $10
-    medium: number; // $10 - $100
-    large: number;  // > $100
-  };
-  timeStats: {
-    firstDonation: string;
-    lastDonation: string;
-    averageTimeBetweenDonations: number;
-  };
-  lastUpdated: number; // timestamp of when this data was last fetched
 }
 
 export interface DonationContextType {
@@ -209,14 +188,7 @@ export interface DonationContextType {
   isDonationsLoading: boolean;
   tokenUsage: TokenUsage;
   donationsByHour: DonationsByHour;
-  chainRoundStats: ChainRoundStats[];
-  fetchDonationsForRounds: (params: {
-    chainId: number;
-    roundIds: string[];
-    programId: string;
-  }) => Promise<void>;
-  getRoundStats: (chainId: number, roundId: string) => ChainRoundStats | undefined;
-  isRoundDataStale: (chainId: number, roundId: string, maxAgeInHours?: number) => boolean;
+  roundDonations: Record<string, RoundDonationData>;
 }
 
 export type AggregateData = {

@@ -2,19 +2,21 @@ import { createContext, useContext, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { graphqlClient } from '../lib/graphql';
 import { GET_PROGRAM_DONATIONS } from '../queries/round';
-import { DonationContextType, DonationNode, DonationsResponse } from '../types';
+import { DonationContextType, DonationNode, DonationsResponse, RoundDonationData } from '../types';
 import { getDonationsByHour } from '@/utils/donations';
 import { getTokenUsage } from '@/utils/donations';
+import { useProgram } from './ProgramProvider';
 
 const DonationContext = createContext<DonationContextType>({
   donationsData: [],
   isDonationsLoading: false,
   tokenUsage: {},   
   donationsByHour: {},
+  roundDonations: {},
 });
 
 const fetchDonations = async (chainId: number, roundIds: string[]) => {
-  const CHUNK_SIZE = 100;
+  const CHUNK_SIZE = 200;
   let offset = 0;
   const allDonations: DonationNode[] = [];
 
@@ -44,20 +46,20 @@ const fetchDonations = async (chainId: number, roundIds: string[]) => {
 
 export const DonationProvider = ({ 
   children,
-  activeProgramId,
-  roundsData
 }: { 
   children: React.ReactNode;
-  activeProgramId: string | null;
-  roundsData: any[] | null;
 }) => {
+  const { activeProgramId, programs } = useProgram();
+  const program = programs.find(program => program.projectId.toLowerCase() === activeProgramId?.toLowerCase());
+
+  const roundsData = program?.rounds;
   const { data: donationsData, isLoading: donationsLoading } = useQuery({
     queryKey: ['programDonations', activeProgramId],
     queryFn: async () => {
       if (!roundsData || !activeProgramId) {
         return [];
       }
-      
+
       const activeProgramRounds = roundsData.filter(round => round.projectId === activeProgramId);
 
       if (activeProgramRounds.length === 0) {
@@ -66,11 +68,11 @@ export const DonationProvider = ({
 
       const roundIds = activeProgramRounds.map(round => round.id);
       const chainIds = [...new Set(activeProgramRounds.map(round => round.chainId))];
-            
+
       const allDonations = await Promise.all(
         chainIds.map(chainId => fetchDonations(chainId, roundIds))
       );
-      
+
       const flattenedDonations = allDonations.flat();
       return flattenedDonations;
     },
@@ -87,12 +89,33 @@ export const DonationProvider = ({
     return donationsData ? getDonationsByHour(donationsData) : {};
   }, [donationsData]);
 
+  const roundDonations = useMemo(() => {
+    if (!donationsData || !roundsData) {
+      return {};
+    }
+
+    const roundData: Record<string, RoundDonationData> = {};
+
+    roundsData.forEach(round => {
+      const roundDonations = donationsData.filter(donation => donation.roundId === round.id);
+      
+      roundData[round.id] = {
+        donationsData: roundDonations,
+        tokenUsage: getTokenUsage(roundDonations),
+        donationsByHour: getDonationsByHour(roundDonations)
+      };
+    });
+
+    return roundData;
+  }, [donationsData, roundsData]);
+
   return (
     <DonationContext.Provider value={{ 
       donationsData: donationsData || [],
       isDonationsLoading: donationsLoading,
       tokenUsage,
-      donationsByHour
+      donationsByHour,
+      roundDonations
     }}>
       {children}
     </DonationContext.Provider>

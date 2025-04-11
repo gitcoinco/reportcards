@@ -4,10 +4,9 @@ import { useRound } from "../../providers/RoundProvider";
 import { useProgramAggregate } from "../../hooks/useProgramAggregate";
 
 export const RoundStats = () => {
-  const { chainId, roundId } = useParams();
-  const numericChainId = chainId ? parseInt(chainId, 10) : 0;
+  const { roundId } = useParams();
   const { data: roundData } = useRound();
-  const { data: aggregateData } = useProgramAggregate(numericChainId, [roundId || ""]);
+  const { data: aggregateData } = useProgramAggregate(roundData?.projectId || "", [roundId || ""]);
 
   if (!roundData || !aggregateData) return null;
 
