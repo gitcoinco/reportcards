@@ -38,7 +38,7 @@ export const ProgramStats = () => {
 
   // Fetch aggregate data for each chain
   const aggregateQueries = Object.entries(roundsByChain).map(
-    ([chainId, roundIds]) => useProgramAggregate(Number(chainId), roundIds)
+    ([chainId, roundIds]) => useProgramAggregate(programId || "", roundIds)
   );
 
   // Combine results from all chains

@@ -176,9 +176,59 @@ export interface DonationsByHour {
   };
 }
 
+export interface ChainRoundStats {
+  chainId: number;
+  roundId: string;
+  totalDonations: number;
+  totalAmountDonatedInUsd: number;
+  uniqueDonors: number;
+  tokenUsage: TokenUsage;
+  donationsByHour: DonationsByHour;
+  averageDonationAmount: number;
+  medianDonationAmount: number;
+  topDonors: {
+    donorAddress: string;
+    totalDonated: number;
+    donationCount: number;
+  }[];
+  donationDistribution: {
+    small: number;  // < $10
+    medium: number; // $10 - $100
+    large: number;  // > $100
+  };
+  timeStats: {
+    firstDonation: string;
+    lastDonation: string;
+    averageTimeBetweenDonations: number;
+  };
+  lastUpdated: number; // timestamp of when this data was last fetched
+}
+
 export interface DonationContextType {
   donationsData: DonationNode[];
   isDonationsLoading: boolean;
   tokenUsage: TokenUsage;
   donationsByHour: DonationsByHour;
+  chainRoundStats: ChainRoundStats[];
+  fetchDonationsForRounds: (params: {
+    chainId: number;
+    roundIds: string[];
+    programId: string;
+  }) => Promise<void>;
+  getRoundStats: (chainId: number, roundId: string) => ChainRoundStats | undefined;
+  isRoundDataStale: (chainId: number, roundId: string, maxAgeInHours?: number) => boolean;
 }
+
+export type AggregateData = {
+  donationsAggregate: { aggregate: { count: number } };
+  roundsAggregate: { aggregate: { sum: {
+    matchAmountInUsd: number;
+    fundedAmountInUsd: number;
+    totalAmountDonatedInUsd: number;
+    totalDonationsCount: number;
+    matchAmount: number;
+  } } };
+  approvedApplications: { aggregate: { count: number } };
+  rejectedApplications: { aggregate: { count: number } };
+  allApplications: { aggregate: { count: number } };
+};

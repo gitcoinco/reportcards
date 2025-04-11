@@ -46,13 +46,13 @@ export const GET_PROGRAM_WITH_ROUND_ID = gql`
 `; 
 
 export const GET_PROGRAM_AGGREGATE_DATA = gql`
-  query getProgramAggregateData($chainId: Int!, $roundIds: [String!]!) {
-    donationsAggregate(where: {chainId: {_eq: $chainId}, roundId: {_in: $roundIds}}) {
+  query getProgramAggregateData($projectId: String!, $roundIds: [String!]!) {
+    donationsAggregate(where: {round: {projectId: {_eq: $projectId}}, roundId: {_in: $roundIds}}) {
       aggregate {
         count(columns: donorAddress, distinct: true)
       }
     }
-    roundsAggregate(where: {chainId: {_eq: $chainId}, id: {_in: $roundIds}}) {
+    roundsAggregate(where: {projectId: {_eq: $projectId}, id: {_in: $roundIds}}) {
       aggregate {
         sum {
           matchAmountInUsd
@@ -63,17 +63,17 @@ export const GET_PROGRAM_AGGREGATE_DATA = gql`
         }
       }
     }
-    approvedApplications: applicationsAggregate(where: {chainId: {_eq: $chainId}, roundId: {_in: $roundIds}, status: {_eq: "APPROVED"}}) {
+    approvedApplications: applicationsAggregate(where: {round: {projectId: {_eq: $projectId}}, roundId: {_in: $roundIds}, status: {_eq: "APPROVED"}}) {
       aggregate {
         count(columns: id)
       }
     }
-    rejectedApplications: applicationsAggregate(where: {chainId: {_eq: $chainId}, roundId: {_in: $roundIds}, status: {_eq: "REJECTED"}}) {
+    rejectedApplications: applicationsAggregate(where: {round: {projectId: {_eq: $projectId}}, roundId: {_in: $roundIds}, status: {_eq: "REJECTED"}}) {
       aggregate {
         count(columns: id)
       }
     }
-    allApplications: applicationsAggregate(where: {chainId: {_eq: $chainId}, roundId: {_in: $roundIds}}) {
+    allApplications: applicationsAggregate(where: {round: {projectId: {_eq: $projectId}}, roundId: {_in: $roundIds}}) {
       aggregate {
         count(columns: id)
       }
