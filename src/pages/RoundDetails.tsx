@@ -7,11 +7,12 @@ import { Download } from "../components/round/Download";
 import { Leaderboard } from "../components/round/Leaderboard";
 import { ShareResults } from "../components/round/ShareResults";
 import Footer from "../components/round/Footer";
-import { RoundDonorDistributionPieChart } from "../components/round/RoundDOnorDistributionPieChart";
+import { RoundDonorDistributionPieChart } from "../components/round/RoundDonorDistributionPieChart";
 import { RoundDonationSizeDistribution } from "../components/round/RoundDonationSizeDistribution";
 import { RoundTokenUsageChart } from "../components/round/RoundTokenUsageChart";
 import { RoundDonationAmountByHourChart } from "@/components/round/RoundDonationAMountByHourChart";
 import { RoundCumulativeDonationAmountChart } from "@/components/round/RoundCumulativeDonationAmountChart";
+
 export const RoundDetails = () => {
   const { isLoading } = useRound();
 
