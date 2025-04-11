@@ -1,25 +1,26 @@
+import { useDonation } from "../../providers/DonationProvider";
+import { LoadingSpinner } from "../main/LoadingSpinner";
 import { PieChart } from "@gitcoin/ui";
-import { useProgram } from "../providers/ProgramProvider";
-import { LoadingSpinner } from "./LoadingSpinner";
-import { DonationNode } from "../types/round";
+import { DonationNode } from "../../types";
 
-const wrapReturn = (content: React.ReactNode) => (
-  <div className="w-full h-full py-20">
-    <div className="max-w-[1000px] mx-auto px-4 flex justify-center">
-      {content}
+const wrapReturn = (component: React.ReactNode) => {
+  return (
+    <div className="w-full max-w-4xl mx-auto px-4 py-20">
+      {component}
     </div>
-  </div>
-);
+  );
+};
 
 export const DonorDistributionPieChart = () => {
-  const { donationsData, isDonationsLoading } = useProgram();
+  const { isDonationsLoading } = useDonation();
+  const { donationsData } = useDonation();
 
   if (isDonationsLoading) {
     return wrapReturn(<LoadingSpinner />);
   }
 
   if (!donationsData || donationsData.length === 0) {
-    return wrapReturn(<div>No donation data available</div>);
+    return wrapReturn(<div>No donations available</div>);
   }
 
   // Count donations per donor

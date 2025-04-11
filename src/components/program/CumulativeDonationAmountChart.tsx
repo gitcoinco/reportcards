@@ -1,6 +1,6 @@
 import { BarChart } from "@gitcoin/ui";
-import { useProgram } from "../providers/ProgramProvider";
-import { LoadingSpinner } from "./LoadingSpinner";
+import { useDonation } from "../../providers/DonationProvider";
+import { LoadingSpinner } from "../main/LoadingSpinner";
 
 const formatHour = (hourString: string) => {
   const [datePart, timePart] = hourString.split('T');
@@ -14,7 +14,7 @@ const formatHour = (hourString: string) => {
 };
 
 export const CumulativeDonationAmountChart = () => {
-  const { donationsByHour, isDonationsLoading } = useProgram();
+  const { donationsByHour, isDonationsLoading } = useDonation();
 
   if (isDonationsLoading) {
     return wrapReturn(<LoadingSpinner />);

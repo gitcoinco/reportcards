@@ -1,5 +1,5 @@
 import { PoolSummary } from "@gitcoin/ui/pool";
-import { useRound } from "../providers/RoundProvider";
+import { useRound } from "../../providers/RoundProvider";
 import { useParams } from "react-router-dom";
 import { ShareButton } from "./ShareButton";
 export const RoundHeader = () => {

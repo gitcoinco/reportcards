@@ -1,5 +1,5 @@
 import { SquarePlot } from "@gitcoin/ui";
-import { useRound } from "../providers/RoundProvider";
+import { useRound } from "../../providers/RoundProvider";
 import { useState, useEffect } from "react";
 
 export const Plot = () => {

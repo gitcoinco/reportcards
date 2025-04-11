@@ -3,11 +3,12 @@ import { RoundProvider } from "./providers/RoundProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Navbar } from "@gitcoin/ui";
 import { ProgramProvider } from "./providers/ProgramProvider";
+import { DonationProvider } from "./providers/DonationProvider";
 import { RoundDetails } from "./pages/RoundDetails";
 import { ProgramDetails } from "./pages/ProgramDetails";
-import { SideNav } from "./components/SideNav";
+import { SideNav } from "./components/main/SideNav";
 import { useProgram } from "./providers/ProgramProvider";
-import { ProgramDropDown } from "./components/ProgramDropDown";
+import { ProgramDropDown } from "./components/main/ProgramDropDown";
 import { Home } from "./pages/Home";
 
 const queryClient = new QueryClient();
@@ -45,10 +46,11 @@ const RoundRoute = () => {
 };
 
 const ProgramRoute = () => {
+
   return (
-    <Layout>
-      <ProgramDetails/>
-    </Layout>
+      <Layout>
+        <ProgramDetails/>
+      </Layout>
   );
 };
 
@@ -57,15 +59,17 @@ export const App = () => {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <ProgramProvider>
-          <Navbar showDivider={false} text={{ text: "Metrics", link: "/" }}>
-            <ProgramDropDown />
-          </Navbar>
+          <DonationProvider>
+            <Navbar showDivider={false} text={{ text: "Report Cards", link: "/" }}>
+              <ProgramDropDown />
+            </Navbar>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/:chainId/:roundId" element={<RoundRoute />} />
             <Route path="/program/:programId" element={<ProgramRoute />} />
           </Routes>
-        </ProgramProvider>
+          </DonationProvider>   
+          </ProgramProvider>
       </BrowserRouter>
     </QueryClientProvider>
   );

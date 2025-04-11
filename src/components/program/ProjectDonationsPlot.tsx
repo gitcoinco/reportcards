@@ -1,7 +1,7 @@
 import { SquarePlot } from "@gitcoin/ui";
-import { useProgram } from "../providers/ProgramProvider";
-import { LoadingSpinner } from "./LoadingSpinner";
-import { DonationNode } from "../types/round";
+import { useDonation } from "../../providers/DonationProvider";
+import { LoadingSpinner } from "../main/LoadingSpinner";
+import { DonationNode } from "../../types";
 
 const wrapReturn = (content: React.ReactNode, showHeading: boolean = true) => (
   <div className="w-full h-full py-20">
@@ -13,7 +13,7 @@ const wrapReturn = (content: React.ReactNode, showHeading: boolean = true) => (
 );
 
 export const ProjectDonationsPlot = () => {
-  const { donationsData, isDonationsLoading, activeProgram } = useProgram();
+  const { donationsData, isDonationsLoading } = useDonation();
 
   if (isDonationsLoading) {
     return wrapReturn(<LoadingSpinner />, false);

@@ -1,6 +1,6 @@
 import React from "react";
-import { useRound } from "../providers/RoundProvider";
-import { exportLeaderboardToCSV } from "../utils";
+import { useRound } from "../../providers/RoundProvider";
+import { exportLeaderboardToCSV } from "../../utils";
 
 export const Download = () => {
   const { data } = useRound();

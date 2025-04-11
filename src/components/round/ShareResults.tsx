@@ -1,4 +1,4 @@
-import { ShareButton } from "./ShareButton";
+import { ShareButton } from "../main/ShareButton";
 
 export const ShareResults = () => {
 

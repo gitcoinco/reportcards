@@ -16,9 +16,9 @@ type AggregateData = {
   allApplications?: { aggregate?: { count?: number } };
 };
 
-export const useProgramAggregate = (chainId: number, roundIds: string[]) => {
+export const useProgramAggregate = (projectId: string, roundIds: string[]) => {
   return useQuery<AggregateData>({
-    queryKey: ['programAggregate', chainId, roundIds],
+    queryKey: ['programAggregate', projectId, roundIds],
     queryFn: async () => {
       if (!roundIds.length) {
         return {
@@ -36,7 +36,7 @@ export const useProgramAggregate = (chainId: number, roundIds: string[]) => {
         };
       }
       return graphqlClient.request<AggregateData>(GET_PROGRAM_AGGREGATE_DATA, {
-        chainId,
+        projectId,
         roundIds
       });
     },

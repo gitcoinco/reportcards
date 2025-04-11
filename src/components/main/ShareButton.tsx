@@ -1,6 +1,6 @@
 import { ShareButton as GitcoinShareButton } from '@gitcoin/ui';
 import { useParams } from 'react-router-dom';
-import { useRound } from '../providers/RoundProvider';
+import { useRound } from '../../providers/RoundProvider';
 
 export const ShareButton = () => {
     const { chainId, roundId } = useParams();

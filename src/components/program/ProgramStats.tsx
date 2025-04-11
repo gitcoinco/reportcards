@@ -1,6 +1,6 @@
 import { StatCardGroup } from "@gitcoin/ui";
-import { useProgram } from "../providers/ProgramProvider";
-import { useProgramAggregate } from "../hooks/useProgramAggregate";
+import { useProgram } from "../../providers/ProgramProvider";
+import { useProgramAggregate } from "../../hooks/useProgramAggregate";
 import { useParams } from "react-router-dom";
 import { getChainById } from "@gitcoin/gitcoin-chain-data";
 
@@ -38,7 +38,7 @@ export const ProgramStats = () => {
 
   // Fetch aggregate data for each chain
   const aggregateQueries = Object.entries(roundsByChain).map(
-    ([chainId, roundIds]) => useProgramAggregate(Number(chainId), roundIds)
+    ([chainId, roundIds]) => useProgramAggregate(programId || "", roundIds)
   );
 
   // Combine results from all chains
@@ -102,7 +102,7 @@ export const ProgramStats = () => {
             value: `${formatTokenAmount(
               stats.matchTokenAmount,
               matchTokenDecimals
-            )} USDC`,
+            )} ${getChainById(round.chainId).tokens.find((t) => t.address.toLowerCase() === round.matchTokenAddress.toLowerCase())?.code}`,
             subvalue: `($${stats.totalMatchAmount.toFixed(2)} USD)`,
           },
           {
