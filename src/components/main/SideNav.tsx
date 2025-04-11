@@ -1,22 +1,32 @@
 import { IconType, SideNav as SideNavWrapper } from "@gitcoin/ui";
 import { useProgram } from "../../providers/ProgramProvider";
-import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useEffect, useMemo } from "react";
 
-interface SideNavProps {    
+interface SideNavProps {
   programId: string;
 }
 
 export const SideNav = ({ programId }: SideNavProps) => {
   const { activeProgram, setActiveProgramId } = useProgram();
   const navigate = useNavigate();
-  const [activeId, setActiveId] = useState<string | undefined>();
+  const path = useLocation();
 
   useEffect(() => {
     if (programId) {
       setActiveProgramId(programId);
     }
   }, [programId, setActiveProgramId]);
+
+  const activeId = useMemo(() => {
+    if (path.pathname.includes(`program/`)) {
+      return `/program/${programId}`;
+    }
+    const round = activeProgram?.rounds.find((round) =>
+      path.pathname.includes(`${round.chainId}/${round.id}`)
+    );
+    return `/${round?.chainId}/${round?.id}`;
+  }, [path.pathname, programId, activeProgram]);
 
   if (!activeProgram) {
     return <div>Program not found</div>;
@@ -42,7 +52,6 @@ export const SideNav = ({ programId }: SideNavProps) => {
   ];
 
   const handleClick = (id: string | undefined) => {
-    setActiveId(id);
     if (id) {
       navigate(id);
     }
