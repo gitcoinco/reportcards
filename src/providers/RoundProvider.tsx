@@ -96,7 +96,6 @@ export const RoundProvider = ({
             (dist) =>
               dist.projectId.toLowerCase() === app.projectId.toLowerCase()
           );
-          console.log("title", app.metadata.application.project.title);
           let matchedUsd = 0;
           if (matchingDistribution && tokenDecimals) {
 
@@ -104,9 +103,7 @@ export const RoundProvider = ({
               BigInt(matchingDistribution.matchAmountInToken),
               tokenDecimals
             );
-            console.log("matchedAmount", matchedAmount);
             matchedUsd = tokenPrice ? tokenPrice * Number(matchedAmount) : 0;
-            console.log("matchedUsd", matchedUsd);
           }
 
           const totalAmount = app.totalAmountDonatedInUsd + matchedUsd;
