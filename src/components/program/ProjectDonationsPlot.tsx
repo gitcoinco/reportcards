@@ -24,21 +24,22 @@ export const ProjectDonationsPlot = () => {
   }
 
   // Count donations per project
-  const projectCounts = donationsData.reduce((acc: Record<string, { count: number; name: string }>, donation: DonationNode) => {
+  const projectCounts = donationsData.reduce((acc: Record<string, { count: number; name: string; amountInUsd: number }>, donation: DonationNode) => {
     const projectId = donation.projectId;
     if (!acc[projectId]) {
       // Get project name from the donation's application data
       const projectName = donation.application?.project?.name || projectId;
-      acc[projectId] = { count: 0, name: projectName };
+      acc[projectId] = { count: 0, name: projectName, amountInUsd: 0 };
     }
     acc[projectId].count++;
+    acc[projectId].amountInUsd += donation.amountInUsd;
     return acc;
   }, {});
 
   // Sort projects by donation count and prepare data for SquarePlot
   const sortedProjects = Object.entries(projectCounts)
-    .sort(([, a], [, b]) => b.count - a.count)
-    .map(([_, { name, count }]) => ({ name, count }));
+    .sort(([, a], [, b]) => b.amountInUsd - a.amountInUsd)
+    .map(([_, { name, count, amountInUsd }]) => ({ name, count, amountInUsd }));
 
   // Ensure we have data to display
   if (sortedProjects.length === 0) {
@@ -49,7 +50,7 @@ export const ProjectDonationsPlot = () => {
     <SquarePlot
       width={800}
       labels={sortedProjects.map(p => p.name)}
-      values={sortedProjects.map(p => p.count)}
+      values={sortedProjects.map(p => p.amountInUsd)}
     />
   );
 }; 

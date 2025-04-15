@@ -96,6 +96,8 @@ export const DonationProvider = ({
 
     const roundData: Record<string, RoundDonationData> = {};
 
+    console.log('donationsData', donationsData);
+
     roundsData.forEach(round => {
       const roundDonations = donationsData.filter(donation => donation.roundId === round.id);
       
